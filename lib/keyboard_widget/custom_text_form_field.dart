@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:custom_keyboard_try/drop_down_widget/keyboard.dart';
-import 'package:custom_keyboard_try/drop_down_widget/keyboard_provider.dart';
-import 'package:custom_keyboard_try/drop_down_widget/keyboard_state.dart';
+import 'package:custom_keyboard_try/keyboard_widget/keyboard.dart';
+import 'package:custom_keyboard_try/keyboard_widget/keyboard_provider.dart';
+import 'package:custom_keyboard_try/keyboard_widget/keyboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -102,6 +102,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Consumer(
       builder: (context, ref, child) {
@@ -142,6 +143,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   return Keyboard(
                     offset: buttonOffset,
                     parentSize: buttonBox.size,
+                    height: height,
                     backspace: _backspace,
                     insertText: (text) {
                       insertText(text);

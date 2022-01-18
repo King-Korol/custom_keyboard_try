@@ -1,15 +1,16 @@
 import 'dart:developer';
 
-import 'package:custom_keyboard_try/drop_down_widget/custom_keyboard.dart';
-import 'package:custom_keyboard_try/drop_down_widget/keyboard_provider.dart';
+import 'package:custom_keyboard_try/keyboard_widget/custom_keyboard.dart';
+import 'package:custom_keyboard_try/keyboard_widget/keyboard_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Keyboard extends ConsumerStatefulWidget {
   const Keyboard({
+    Key? key,
     required this.offset,
     required this.parentSize,
-    Key? key,
+    required this.height,
     this.itemExtent,
     this.insertText,
     this.backspace,
@@ -18,6 +19,8 @@ class Keyboard extends ConsumerStatefulWidget {
   final double? itemExtent;
 
   final Size parentSize;
+
+  final double height;
 
   final Offset offset;
 
@@ -33,6 +36,10 @@ class _KeyboardState extends ConsumerState<Keyboard> {
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ref.watch(keyboardProvider.notifier).changeHeightPadding(
+            (widget.offset.dy + widget.parentSize.height),
+            widget.height,
+          );
       ref.watch(keyboardProvider.notifier).changeShowCursor(true);
     });
     super.initState();
@@ -68,14 +75,11 @@ class _KeyboardState extends ConsumerState<Keyboard> {
                 },
               ),
               Positioned(
-                // top: top,
                 bottom: 0,
                 child: Container(
                   width: width,
                   height: _height,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.primary),
                     boxShadow: [
                       BoxShadow(
                           color: Colors.black.withOpacity(0.2),
