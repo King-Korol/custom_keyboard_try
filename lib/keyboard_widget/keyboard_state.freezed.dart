@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'keyboard_state.dart';
 
@@ -20,12 +22,14 @@ class _$KeyboardStateTearOff {
       {bool showCursor = false,
       String localeKeyboard = localeUk,
       int keyboardType = letterType,
-      double heightPadding = 0}) {
+      double heightPadding = 0,
+      int number = -1}) {
     return _KeyboardState(
       showCursor: showCursor,
       localeKeyboard: localeKeyboard,
       keyboardType: keyboardType,
       heightPadding: heightPadding,
+      number: number,
     );
   }
 }
@@ -39,6 +43,7 @@ mixin _$KeyboardState {
   String get localeKeyboard => throw _privateConstructorUsedError;
   int get keyboardType => throw _privateConstructorUsedError;
   double get heightPadding => throw _privateConstructorUsedError;
+  int get number => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $KeyboardStateCopyWith<KeyboardState> get copyWith =>
@@ -54,7 +59,8 @@ abstract class $KeyboardStateCopyWith<$Res> {
       {bool showCursor,
       String localeKeyboard,
       int keyboardType,
-      double heightPadding});
+      double heightPadding,
+      int number});
 }
 
 /// @nodoc
@@ -72,6 +78,7 @@ class _$KeyboardStateCopyWithImpl<$Res>
     Object? localeKeyboard = freezed,
     Object? keyboardType = freezed,
     Object? heightPadding = freezed,
+    Object? number = freezed,
   }) {
     return _then(_value.copyWith(
       showCursor: showCursor == freezed
@@ -90,6 +97,10 @@ class _$KeyboardStateCopyWithImpl<$Res>
           ? _value.heightPadding
           : heightPadding // ignore: cast_nullable_to_non_nullable
               as double,
+      number: number == freezed
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -105,7 +116,8 @@ abstract class _$KeyboardStateCopyWith<$Res>
       {bool showCursor,
       String localeKeyboard,
       int keyboardType,
-      double heightPadding});
+      double heightPadding,
+      int number});
 }
 
 /// @nodoc
@@ -125,6 +137,7 @@ class __$KeyboardStateCopyWithImpl<$Res>
     Object? localeKeyboard = freezed,
     Object? keyboardType = freezed,
     Object? heightPadding = freezed,
+    Object? number = freezed,
   }) {
     return _then(_KeyboardState(
       showCursor: showCursor == freezed
@@ -143,6 +156,10 @@ class __$KeyboardStateCopyWithImpl<$Res>
           ? _value.heightPadding
           : heightPadding // ignore: cast_nullable_to_non_nullable
               as double,
+      number: number == freezed
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -154,51 +171,54 @@ class _$_KeyboardState implements _KeyboardState {
       {this.showCursor = false,
       this.localeKeyboard = localeUk,
       this.keyboardType = letterType,
-      this.heightPadding = 0});
+      this.heightPadding = 0,
+      this.number = -1});
 
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool showCursor;
-  @JsonKey(defaultValue: localeUk)
+  @JsonKey()
   @override
   final String localeKeyboard;
-  @JsonKey(defaultValue: letterType)
+  @JsonKey()
   @override
   final int keyboardType;
-  @JsonKey(defaultValue: 0)
+  @JsonKey()
   @override
   final double heightPadding;
+  @JsonKey()
+  @override
+  final int number;
 
   @override
   String toString() {
-    return 'KeyboardState(showCursor: $showCursor, localeKeyboard: $localeKeyboard, keyboardType: $keyboardType, heightPadding: $heightPadding)';
+    return 'KeyboardState(showCursor: $showCursor, localeKeyboard: $localeKeyboard, keyboardType: $keyboardType, heightPadding: $heightPadding, number: $number)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _KeyboardState &&
-            (identical(other.showCursor, showCursor) ||
-                const DeepCollectionEquality()
-                    .equals(other.showCursor, showCursor)) &&
-            (identical(other.localeKeyboard, localeKeyboard) ||
-                const DeepCollectionEquality()
-                    .equals(other.localeKeyboard, localeKeyboard)) &&
-            (identical(other.keyboardType, keyboardType) ||
-                const DeepCollectionEquality()
-                    .equals(other.keyboardType, keyboardType)) &&
-            (identical(other.heightPadding, heightPadding) ||
-                const DeepCollectionEquality()
-                    .equals(other.heightPadding, heightPadding)));
+        (other.runtimeType == runtimeType &&
+            other is _KeyboardState &&
+            const DeepCollectionEquality()
+                .equals(other.showCursor, showCursor) &&
+            const DeepCollectionEquality()
+                .equals(other.localeKeyboard, localeKeyboard) &&
+            const DeepCollectionEquality()
+                .equals(other.keyboardType, keyboardType) &&
+            const DeepCollectionEquality()
+                .equals(other.heightPadding, heightPadding) &&
+            const DeepCollectionEquality().equals(other.number, number));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(showCursor) ^
-      const DeepCollectionEquality().hash(localeKeyboard) ^
-      const DeepCollectionEquality().hash(keyboardType) ^
-      const DeepCollectionEquality().hash(heightPadding);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(showCursor),
+      const DeepCollectionEquality().hash(localeKeyboard),
+      const DeepCollectionEquality().hash(keyboardType),
+      const DeepCollectionEquality().hash(heightPadding),
+      const DeepCollectionEquality().hash(number));
 
   @JsonKey(ignore: true)
   @override
@@ -211,16 +231,19 @@ abstract class _KeyboardState implements KeyboardState {
       {bool showCursor,
       String localeKeyboard,
       int keyboardType,
-      double heightPadding}) = _$_KeyboardState;
+      double heightPadding,
+      int number}) = _$_KeyboardState;
 
   @override
-  bool get showCursor => throw _privateConstructorUsedError;
+  bool get showCursor;
   @override
-  String get localeKeyboard => throw _privateConstructorUsedError;
+  String get localeKeyboard;
   @override
-  int get keyboardType => throw _privateConstructorUsedError;
+  int get keyboardType;
   @override
-  double get heightPadding => throw _privateConstructorUsedError;
+  double get heightPadding;
+  @override
+  int get number;
   @override
   @JsonKey(ignore: true)
   _$KeyboardStateCopyWith<_KeyboardState> get copyWith =>

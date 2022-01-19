@@ -11,21 +11,20 @@ class Keyboard extends ConsumerStatefulWidget {
     required this.offset,
     required this.parentSize,
     required this.height,
-    this.itemExtent,
-    this.insertText,
-    this.backspace,
+    required this.keyboardType,
+    required this.insertText,
+    required this.backspace,
+    this.ok,
   }) : super(key: key);
 
-  final double? itemExtent;
-
   final Size parentSize;
-
   final double height;
-
   final Offset offset;
+  final int keyboardType;
 
-  final Function(String)? insertText;
-  final Function()? backspace;
+  final Function(String) insertText;
+  final Function() backspace;
+  final VoidCallback? ok;
 
   @override
   _KeyboardState createState() => _KeyboardState();
@@ -39,6 +38,7 @@ class _KeyboardState extends ConsumerState<Keyboard> {
       ref.watch(keyboardProvider.notifier).changeHeightPadding(
             (widget.offset.dy + widget.parentSize.height),
             widget.height,
+            widget.keyboardType,
           );
       ref.watch(keyboardProvider.notifier).changeShowCursor(true);
     });
@@ -49,22 +49,14 @@ class _KeyboardState extends ConsumerState<Keyboard> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    _height = height * 0.33;
+    _height = height * (widget.keyboardType == 0 ? 0.33 : 0.22);
 
-    final padding = MediaQuery.of(context).padding;
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final bottom = constraints.maxHeight +
-              padding.top -
-              widget.offset.dy -
-              widget.parentSize.height;
-          log('''Keyboard: padding: $padding,
-           widget.offset.dy: ${widget.offset.dy},
-           widget.parentSize.height: ${widget.parentSize.height}
-           widget.parentSize.width: ${widget.parentSize.width}
-           constraints.maxHeight: ${constraints.maxHeight}''');
-          log('bottom: $bottom,_height: $_height, sizToTextField: ${_height + widget.parentSize.height}');
+          // log('''Keyboard: widget.offset.dy: ${widget.offset.dy},
+          //  constraints.maxHeight: ${constraints.maxHeight}''');
+          // log('bottom: $bottom,_height: $_height, sizToTextField: ${_height + widget.parentSize.height}');
           return Stack(
             children: [
               GestureDetector(
@@ -89,15 +81,24 @@ class _KeyboardState extends ConsumerState<Keyboard> {
                     ],
                   ),
                   child: CustomKeyboard(
-                    onTextInput: (myText) {
-                      log('onTextInput myText: $myText');
-                      widget.insertText?.call(myText);
-                    },
-                    onBackspace: () {
-                      log('onBackspace');
-                      widget.backspace?.call();
-                    },
-                  ),
+                      type: widget.keyboardType,
+                      onTextInput: (myText) {
+                        log('onTextInput: $myText');
+                        widget.insertText.call(myText);
+                      },
+                      onBackspace: () {
+                        log('onBackspace');
+                        widget.backspace.call();
+                      },
+                      ok: () {
+                        ref
+                            .watch(keyboardProvider.notifier)
+                            .changeShowCursor(false);
+                        Navigator.maybeOf(context, rootNavigator: true)
+                            ?.maybePop();
+
+                        widget.ok?.call();
+                      }),
                 ),
               ),
             ],

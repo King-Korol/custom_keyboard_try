@@ -15,5 +15,6 @@ class KeyboardState with _$KeyboardState {
     @Default(localeUk) String localeKeyboard,
     @Default(letterType) int keyboardType,
     @Default(0) double heightPadding,
+    @Default(-1) int number,
   }) = _KeyboardState;
 }

@@ -29,12 +29,22 @@ class KeyboardNotifier extends StateNotifier<KeyboardState> {
             state.keyboardType == letterType ? numericType : letterType);
   }
 
-  void changeHeightPadding(double offset, double height) {
+  void changeHeightPadding(double offset, double height, int type) {
     log('KeyboardNotifier changeHeightPadding: $height, offset: $offset');
-    final heightPadding = (offset - height);
-    state = state.copyWith(
-        heightPadding: height * 0.33 -
-            (heightPadding < 0 ? heightPadding * (-1) : heightPadding));
+    final heightPadding = (height - offset);
+    final showingScreen = height - (height * (type == 0 ? 0.33 : 0.22));
+    final heightToScroll = offset - showingScreen;
+    log('heightPadding: $heightPadding');
+    log('showingScreen: $showingScreen');
+    log('heightToScroll: $heightToScroll');
+    state =
+        state.copyWith(heightPadding: heightToScroll < 0 ? 0 : heightToScroll);
+    log('state.heightPadding: ${state.heightPadding}');
+  }
+
+  void changeNumber(int number) {
+    log('KeyboardNotifier changeNumber: $number');
+    state = state.copyWith(number: number);
   }
 }
 

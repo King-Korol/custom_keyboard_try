@@ -6,18 +6,43 @@ import 'package:custom_keyboard_try/keyboard_widget/keyboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+const typeText = 0;
+const typeNumber = 1;
+
 class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
-  final String? labelText;
+  final int keyboardType;
+  final double width;
+  final int number;
+  final bool showCursor;
+  final TextStyle? style;
   final String? Function(String?)? validator;
   final String? Function(String?)? onChange;
+  final String? labelText;
+  final VoidCallback? ok;
+  final IconData? sufixIconData;
+  final IconData? prefixIconData;
+  final Function? sufixIconPressed;
+  final Function? prefixIconPressed;
+  final int? maxLines;
 
   const CustomTextFormField({
     Key? key,
     required this.controller,
+    required this.keyboardType,
+    required this.width,
+    required this.number,
+    required this.showCursor,
+    this.style,
     this.validator,
-    this.labelText,
     this.onChange,
+    this.labelText,
+    this.ok,
+    this.sufixIconData,
+    this.prefixIconData,
+    this.sufixIconPressed,
+    this.prefixIconPressed,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -96,6 +121,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   void dispose() {
+    // _focusNode.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -103,10 +129,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     return Consumer(
       builder: (context, ref, child) {
-        final showCursor = ref.watch(keyboardProvider).showCursor;
+        final number = ref.watch(keyboardProvider).number;
         ref.listen<KeyboardState>(keyboardProvider, (states, state) {
           if (state.showCursor) {
             _focusNode.requestFocus();
@@ -115,14 +140,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           }
         });
         return SizedBox(
-          width: width * 0.5,
+          width: widget.width,
           child: TextFormField(
             controller: widget.controller,
             validator: (value) {
-              log('validator in dropDown ${widget.validator?.call(value)}');
+              log('validator in customTextFormField ${widget.validator?.call(value)}');
               return widget.validator?.call(value);
             },
             onTap: () {
+              ref.watch(keyboardProvider.notifier).changeNumber(widget.number);
               final RenderBox buttonBox =
                   context.findRenderObject()! as RenderBox;
 
@@ -131,8 +157,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 Offset.zero,
                 ancestor: navigator.context.findRenderObject(),
               );
-              log('buttonBox.size: ${buttonBox.size}}');
-              log('buttonOffset: $buttonOffset');
+              // log('buttonBox.size: ${buttonBox.size}}');
+              // log('buttonOffset: $buttonOffset');
+              log('widget.number: ${widget.number}');
 
               showDialog(
                 barrierColor: Colors.transparent,
@@ -144,7 +171,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     offset: buttonOffset,
                     parentSize: buttonBox.size,
                     height: height,
+                    keyboardType: widget.keyboardType,
                     backspace: _backspace,
+                    ok: widget.ok,
                     insertText: (text) {
                       insertText(text);
                     },
@@ -152,18 +181,35 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 },
               );
             },
-            onChanged: (value) {
-              log('value: $value');
-            },
             enabled: true,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: widget.style ?? Theme.of(context).textTheme.bodyText1,
+            maxLines: widget.maxLines ?? 1,
             decoration: InputDecoration(
               labelText: widget.labelText,
-              suffixIcon: IconButton(
-                icon: Icon(Icons.keyboard_arrow_down_outlined,
-                    size: 26.0, color: Theme.of(context).colorScheme.primary),
-                onPressed: () {},
-              ),
+              suffixIcon: widget.sufixIconData != null
+                  ? IconButton(
+                      icon: Icon(
+                        widget.sufixIconData,
+                        size: 46.0,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: () {
+                        widget.sufixIconPressed?.call();
+                      },
+                    )
+                  : null,
+              prefixIcon: widget.prefixIconData != null
+                  ? IconButton(
+                      icon: Icon(
+                        widget.prefixIconData,
+                        size: 46.0,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: () {
+                        widget.prefixIconPressed?.call();
+                      },
+                    )
+                  : null,
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.primary,
@@ -184,8 +230,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               ),
             ),
             readOnly: true,
-            showCursor: showCursor,
-            focusNode: _focusNode,
+            showCursor: widget.showCursor,
+            focusNode: number == widget.number ? _focusNode : null,
           ),
         );
       },

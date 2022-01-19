@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:custom_keyboard_try/keyboard_widget/keyboard_provider.dart';
 import 'package:custom_keyboard_try/keyboard_widget/keyboard_state.dart';
 import 'package:flutter/material.dart';
@@ -6,21 +8,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CustomKeyboard extends StatefulWidget {
   const CustomKeyboard({
     Key? key,
-    this.onTextInput,
-    this.onBackspace,
+    required this.onTextInput,
+    required this.onBackspace,
+    required this.type,
+    required this.ok,
   }) : super(key: key);
 
-  final ValueSetter<String>? onTextInput;
-  final VoidCallback? onBackspace;
+  final ValueSetter<String> onTextInput;
+  final VoidCallback onBackspace;
+  final VoidCallback? ok;
+  final int type;
 
   @override
   State<CustomKeyboard> createState() => _CustomKeyboardState();
 }
 
 class _CustomKeyboardState extends State<CustomKeyboard> {
-  void _textInputHandler(String text) => widget.onTextInput?.call(text);
+  void _textInputHandler(String text) => widget.onTextInput.call(text);
 
-  void _backspaceHandler() => widget.onBackspace?.call();
+  void _backspaceHandler() => widget.onBackspace.call();
 
   late bool lettersBig = false;
   @override
@@ -28,20 +34,41 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
     final double height = MediaQuery.of(context).size.height;
 
     return Container(
-      height: height * 0.33,
+      height: height * (widget.type == 0 ? 0.33 : 0.22),
       padding: EdgeInsets.all(5),
       color: Colors.blue,
       child: Consumer(builder: (context, ref, child) {
         final locale = ref.watch(keyboardProvider).localeKeyboard;
         final keyboardType = ref.watch(keyboardProvider).keyboardType;
-        return Column(
-          children: [
-            buildRowOne(locale, keyboardType),
-            buildRowTwo(locale, keyboardType),
-            buildRowThree(locale, keyboardType),
-            buildRowFour(locale, ref, keyboardType),
-          ],
-        );
+        return widget.type == 0
+            ? Column(
+                children: [
+                  buildRowOne(locale, keyboardType),
+                  buildRowTwo(locale, keyboardType),
+                  buildRowThree(locale, keyboardType),
+                  buildRowFour(locale, ref, keyboardType),
+                ],
+              )
+            : Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      children: [
+                        buildFirstNumberLine(),
+                        buildSecondNumberLine(),
+                      ],
+                    ),
+                  ),
+                  TextKey(
+                    text: 'OK',
+                    onTextInput: (value) {
+                      widget.ok?.call();
+                    },
+                    type: 2,
+                  )
+                ],
+              );
       }),
     );
   }
@@ -313,7 +340,7 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
         children: [
           if (keyboardType == letterType)
             FunctionalKey(
-              onBackspace: () {
+              onPressed: () {
                 setState(() {
                   lettersBig = !lettersBig;
                 });
@@ -424,7 +451,7 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
               onTextInput: _textInputHandler,
             ),
           FunctionalKey(
-            onBackspace: _backspaceHandler,
+            onPressed: _backspaceHandler,
             icon: Icons.backspace_outlined,
           ),
         ],
@@ -447,7 +474,7 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
             },
           ),
           FunctionalKey(
-            onBackspace: () {
+            onPressed: () {
               ref.watch(keyboardProvider.notifier).changeLocaleKeyboard();
             },
             icon: Icons.language_outlined,
@@ -466,9 +493,87 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
             onTextInput: _textInputHandler,
           ),
           FunctionalKey(
-            onBackspace: _backspaceHandler,
+            onPressed: _backspaceHandler,
             flex: 2,
             icon: Icons.subdirectory_arrow_left_outlined,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded buildFirstNumberLine() {
+    return Expanded(
+      child: Row(
+        children: [
+          TextKey(
+            text: '1',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '2',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '3',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '4',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '5',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          FunctionalKey(
+            onPressed: _backspaceHandler,
+            icon: Icons.backspace_outlined,
+            type: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded buildSecondNumberLine() {
+    return Expanded(
+      child: Row(
+        children: [
+          TextKey(
+            text: '6',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '7',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '8',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '9',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '0',
+            onTextInput: _textInputHandler,
+            type: 1,
+          ),
+          TextKey(
+            text: '.',
+            onTextInput: _textInputHandler,
+            type: 1,
           ),
         ],
       ),
@@ -699,18 +804,24 @@ class TextKey extends StatelessWidget {
     @required this.text,
     this.onTextInput,
     this.flex = 1,
+    this.type = 0,
   }) : super(key: key);
 
   final String? text;
   final ValueSetter<String>? onTextInput;
   final int flex;
+  final int? type;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
       child: Container(
-        margin: const EdgeInsets.all(6.0),
+        margin: EdgeInsets.all(type == 0
+            ? 6.0
+            : type == 1
+                ? 15
+                : 27),
         decoration: BoxDecoration(
             color: Colors.red, borderRadius: BorderRadius.circular(8)),
         child: GestureDetector(
@@ -732,26 +843,32 @@ class TextKey extends StatelessWidget {
 class FunctionalKey extends StatelessWidget {
   const FunctionalKey({
     Key? key,
-    this.onBackspace,
+    this.onPressed,
     this.flex = 1,
     required this.icon,
+    this.type = 0,
   }) : super(key: key);
 
-  final VoidCallback? onBackspace;
+  final VoidCallback? onPressed;
   final int flex;
   final IconData icon;
+  final int? type;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
       child: Container(
-        margin: const EdgeInsets.all(6.0),
+        margin: EdgeInsets.all(type == 0
+            ? 6.0
+            : type == 1
+                ? 15
+                : 27),
         color: Colors.blue.shade300,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            onBackspace?.call();
+            onPressed?.call();
           },
           child: Center(
             child: Icon(
