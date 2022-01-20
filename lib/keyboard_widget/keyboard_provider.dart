@@ -25,8 +25,8 @@ class KeyboardNotifier extends StateNotifier<KeyboardState> {
   void changeKeyboardType() {
     log('KeyboardNotifier changeLocaleKeyboard');
     state = state.copyWith(
-        keyboardType:
-            state.keyboardType == letterType ? numericType : letterType);
+        bigKeyboardType:
+            state.bigKeyboardType == letterType ? numericType : letterType);
   }
 
   void changeHeightPadding(double offset, double height, int type) {

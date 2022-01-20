@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:custom_keyboard_try/keyboard_widget/keyboard_provider.dart';
 import 'package:custom_keyboard_try/keyboard_widget/keyboard_state.dart';
@@ -10,14 +10,14 @@ class CustomKeyboard extends StatefulWidget {
     Key? key,
     required this.onTextInput,
     required this.onBackspace,
-    required this.type,
+    required this.keyboardType,
     required this.ok,
   }) : super(key: key);
 
   final ValueSetter<String> onTextInput;
   final VoidCallback onBackspace;
   final VoidCallback? ok;
-  final int type;
+  final int keyboardType;
 
   @override
   State<CustomKeyboard> createState() => _CustomKeyboardState();
@@ -34,19 +34,19 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
     final double height = MediaQuery.of(context).size.height;
 
     return Container(
-      height: height * (widget.type == 0 ? 0.33 : 0.22),
+      height: height * (widget.keyboardType == 0 ? 0.33 : 0.22),
       padding: EdgeInsets.all(5),
       color: Colors.blue,
       child: Consumer(builder: (context, ref, child) {
         final locale = ref.watch(keyboardProvider).localeKeyboard;
-        final keyboardType = ref.watch(keyboardProvider).keyboardType;
-        return widget.type == 0
+        final bigKeyboardType = ref.watch(keyboardProvider).bigKeyboardType;
+        return widget.keyboardType == 0
             ? Column(
                 children: [
-                  buildRowOne(locale, keyboardType),
-                  buildRowTwo(locale, keyboardType),
-                  buildRowThree(locale, keyboardType),
-                  buildRowFour(locale, ref, keyboardType),
+                  buildRowOne(locale, bigKeyboardType),
+                  buildRowTwo(locale, bigKeyboardType),
+                  buildRowThree(locale, bigKeyboardType),
+                  buildRowFour(locale, ref, bigKeyboardType),
                 ],
               )
             : Row(
@@ -346,6 +346,7 @@ class _CustomKeyboardState extends State<CustomKeyboard> {
                 });
               },
               icon: Icons.forward_sharp,
+              rotateIcon: true,
             ),
           TextKey(
             text: textKey(
@@ -847,12 +848,14 @@ class FunctionalKey extends StatelessWidget {
     this.flex = 1,
     required this.icon,
     this.type = 0,
+    this.rotateIcon = false,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final int flex;
   final IconData icon;
   final int? type;
+  final bool rotateIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -871,9 +874,12 @@ class FunctionalKey extends StatelessWidget {
             onPressed?.call();
           },
           child: Center(
-            child: Icon(
-              icon,
-              size: 46,
+            child: Transform.rotate(
+              angle: rotateIcon ? (270 * pi / 180) : (90 * pi),
+              child: Icon(
+                icon,
+                size: 46,
+              ),
             ),
           ),
         ),

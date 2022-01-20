@@ -14,26 +14,18 @@ class KeyboardDemo extends StatefulWidget {
 }
 
 class _KeyboardDemoState extends State<KeyboardDemo> {
-  late TextEditingController textController1;
-  late TextEditingController textController2;
-  late TextEditingController textController3;
-  late TextEditingController textController4;
-  late TextEditingController textController5;
-  late TextEditingController textController6;
-  late TextEditingController textController7;
   final ScrollController scrollController = ScrollController();
   bool sizeBottomPadding = false;
 
   @override
   void initState() {
-    textController1 = TextEditingController(text: '');
-    textController2 = TextEditingController(text: '');
-    textController3 = TextEditingController(text: '');
-    textController4 = TextEditingController(text: '');
-    textController5 = TextEditingController(text: '');
-    textController6 = TextEditingController(text: '');
-    textController7 = TextEditingController(text: '');
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,7 +78,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.red[600],
                     ),
                     CustomTextFormField(
-                      controller: textController1,
                       keyboardType: typeNumber,
                       width: width * 0.5,
                       number: 0,
@@ -104,7 +95,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.orange[400],
                     ),
                     CustomTextFormField(
-                      controller: textController2,
                       keyboardType: typeText,
                       width: width * 0.5,
                       number: 1,
@@ -119,7 +109,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.red[400],
                     ),
                     CustomTextFormField(
-                      controller: textController3,
                       keyboardType: typeNumber,
                       width: width * 0.4,
                       number: 2,
@@ -134,7 +123,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.black12,
                     ),
                     CustomTextFormField(
-                      controller: textController4,
                       keyboardType: typeNumber,
                       width: width * 0.6,
                       number: 3,
@@ -148,7 +136,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.pink[400],
                     ),
                     CustomTextFormField(
-                      controller: textController5,
                       keyboardType: typeText,
                       width: width * 0.5,
                       number: 4,
@@ -162,7 +149,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.amber[400],
                     ),
                     CustomTextFormField(
-                      controller: textController6,
                       keyboardType: typeText,
                       width: width * 0.4,
                       number: 5,
@@ -176,7 +162,6 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
                       color: Colors.lightGreen[400],
                     ),
                     CustomTextFormField(
-                      controller: textController7,
                       keyboardType: typeText,
                       width: width * 0.6,
                       number: 6,
@@ -197,11 +182,5 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
         );
       }),
     );
-  }
-
-  @override
-  void dispose() {
-    textController1.dispose();
-    super.dispose();
   }
 }

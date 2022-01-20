@@ -10,7 +10,6 @@ const typeText = 0;
 const typeNumber = 1;
 
 class CustomTextFormField extends StatefulWidget {
-  final TextEditingController controller;
   final int keyboardType;
   final double width;
   final int number;
@@ -19,16 +18,14 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final String? Function(String?)? onChange;
   final String? labelText;
+  final TextStyle? labelStyle;
   final VoidCallback? ok;
-  final IconData? sufixIconData;
-  final IconData? prefixIconData;
-  final Function? sufixIconPressed;
-  final Function? prefixIconPressed;
+  final Widget? sufixIcon;
+  final Widget? prefixIcon;
   final int? maxLines;
 
   const CustomTextFormField({
     Key? key,
-    required this.controller,
     required this.keyboardType,
     required this.width,
     required this.number,
@@ -37,11 +34,10 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.onChange,
     this.labelText,
+    this.labelStyle,
     this.ok,
-    this.sufixIconData,
-    this.prefixIconData,
-    this.sufixIconPressed,
-    this.prefixIconPressed,
+    this.sufixIcon,
+    this.prefixIcon,
     this.maxLines,
   }) : super(key: key);
 
@@ -51,24 +47,26 @@ class CustomTextFormField extends StatefulWidget {
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late FocusNode _focusNode;
+  late TextEditingController textController;
 
   @override
   void initState() {
     _focusNode = FocusNode();
+    textController = TextEditingController(text: '');
     super.initState();
   }
 
   void insertText(String myText) {
-    final text = widget.controller.text;
-    final textSelection = widget.controller.selection;
+    final text = textController.text;
+    final textSelection = textController.selection;
     final newText = text.replaceRange(
       textSelection.start,
       textSelection.end,
       myText,
     );
     final myTextLength = myText.length;
-    widget.controller.text = newText;
-    widget.controller.selection = textSelection.copyWith(
+    textController.text = newText;
+    textController.selection = textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
@@ -76,8 +74,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 
   void _backspace() {
-    final text = widget.controller.text;
-    final textSelection = widget.controller.selection;
+    final text = textController.text;
+    final textSelection = textController.selection;
     final selectionLength = textSelection.end - textSelection.start;
     // There is a selection.
     if (selectionLength > 0) {
@@ -86,8 +84,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         textSelection.end,
         '',
       );
-      widget.controller.text = newText;
-      widget.controller.selection = textSelection.copyWith(
+      textController.text = newText;
+      textController.selection = textSelection.copyWith(
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
@@ -107,8 +105,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       newEnd,
       '',
     );
-    widget.controller.text = newText;
-    widget.controller.selection = textSelection.copyWith(
+    textController.text = newText;
+    textController.selection = textSelection.copyWith(
       baseOffset: newStart,
       extentOffset: newStart,
     );
@@ -121,8 +119,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   void dispose() {
-    // _focusNode.dispose();
     _focusNode.dispose();
+    textController.dispose();
     super.dispose();
   }
 
@@ -142,7 +140,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         return SizedBox(
           width: widget.width,
           child: TextFormField(
-            controller: widget.controller,
+            controller: textController,
             validator: (value) {
               log('validator in customTextFormField ${widget.validator?.call(value)}');
               return widget.validator?.call(value);
@@ -157,8 +155,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 Offset.zero,
                 ancestor: navigator.context.findRenderObject(),
               );
-              // log('buttonBox.size: ${buttonBox.size}}');
-              // log('buttonOffset: $buttonOffset');
+              log('buttonBox.size: ${buttonBox.size}}');
+              log('buttonOffset: $buttonOffset');
               log('widget.number: ${widget.number}');
 
               showDialog(
@@ -186,30 +184,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             maxLines: widget.maxLines ?? 1,
             decoration: InputDecoration(
               labelText: widget.labelText,
-              suffixIcon: widget.sufixIconData != null
-                  ? IconButton(
-                      icon: Icon(
-                        widget.sufixIconData,
-                        size: 46.0,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onPressed: () {
-                        widget.sufixIconPressed?.call();
-                      },
-                    )
-                  : null,
-              prefixIcon: widget.prefixIconData != null
-                  ? IconButton(
-                      icon: Icon(
-                        widget.prefixIconData,
-                        size: 46.0,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onPressed: () {
-                        widget.prefixIconPressed?.call();
-                      },
-                    )
-                  : null,
+              labelStyle: widget.labelStyle,
+              suffixIcon: widget.sufixIcon,
+              prefixIcon: widget.prefixIcon,
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.primary,

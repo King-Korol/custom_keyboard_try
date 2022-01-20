@@ -13,7 +13,7 @@ class KeyboardState with _$KeyboardState {
   const factory KeyboardState({
     @Default(false) bool showCursor,
     @Default(localeUk) String localeKeyboard,
-    @Default(letterType) int keyboardType,
+    @Default(letterType) int bigKeyboardType,
     @Default(0) double heightPadding,
     @Default(-1) int number,
   }) = _KeyboardState;

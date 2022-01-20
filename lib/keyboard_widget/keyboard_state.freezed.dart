@@ -21,13 +21,13 @@ class _$KeyboardStateTearOff {
   _KeyboardState call(
       {bool showCursor = false,
       String localeKeyboard = localeUk,
-      int keyboardType = letterType,
+      int bigKeyboardType = letterType,
       double heightPadding = 0,
       int number = -1}) {
     return _KeyboardState(
       showCursor: showCursor,
       localeKeyboard: localeKeyboard,
-      keyboardType: keyboardType,
+      bigKeyboardType: bigKeyboardType,
       heightPadding: heightPadding,
       number: number,
     );
@@ -41,7 +41,7 @@ const $KeyboardState = _$KeyboardStateTearOff();
 mixin _$KeyboardState {
   bool get showCursor => throw _privateConstructorUsedError;
   String get localeKeyboard => throw _privateConstructorUsedError;
-  int get keyboardType => throw _privateConstructorUsedError;
+  int get bigKeyboardType => throw _privateConstructorUsedError;
   double get heightPadding => throw _privateConstructorUsedError;
   int get number => throw _privateConstructorUsedError;
 
@@ -58,7 +58,7 @@ abstract class $KeyboardStateCopyWith<$Res> {
   $Res call(
       {bool showCursor,
       String localeKeyboard,
-      int keyboardType,
+      int bigKeyboardType,
       double heightPadding,
       int number});
 }
@@ -76,7 +76,7 @@ class _$KeyboardStateCopyWithImpl<$Res>
   $Res call({
     Object? showCursor = freezed,
     Object? localeKeyboard = freezed,
-    Object? keyboardType = freezed,
+    Object? bigKeyboardType = freezed,
     Object? heightPadding = freezed,
     Object? number = freezed,
   }) {
@@ -89,9 +89,9 @@ class _$KeyboardStateCopyWithImpl<$Res>
           ? _value.localeKeyboard
           : localeKeyboard // ignore: cast_nullable_to_non_nullable
               as String,
-      keyboardType: keyboardType == freezed
-          ? _value.keyboardType
-          : keyboardType // ignore: cast_nullable_to_non_nullable
+      bigKeyboardType: bigKeyboardType == freezed
+          ? _value.bigKeyboardType
+          : bigKeyboardType // ignore: cast_nullable_to_non_nullable
               as int,
       heightPadding: heightPadding == freezed
           ? _value.heightPadding
@@ -115,7 +115,7 @@ abstract class _$KeyboardStateCopyWith<$Res>
   $Res call(
       {bool showCursor,
       String localeKeyboard,
-      int keyboardType,
+      int bigKeyboardType,
       double heightPadding,
       int number});
 }
@@ -135,7 +135,7 @@ class __$KeyboardStateCopyWithImpl<$Res>
   $Res call({
     Object? showCursor = freezed,
     Object? localeKeyboard = freezed,
-    Object? keyboardType = freezed,
+    Object? bigKeyboardType = freezed,
     Object? heightPadding = freezed,
     Object? number = freezed,
   }) {
@@ -148,9 +148,9 @@ class __$KeyboardStateCopyWithImpl<$Res>
           ? _value.localeKeyboard
           : localeKeyboard // ignore: cast_nullable_to_non_nullable
               as String,
-      keyboardType: keyboardType == freezed
-          ? _value.keyboardType
-          : keyboardType // ignore: cast_nullable_to_non_nullable
+      bigKeyboardType: bigKeyboardType == freezed
+          ? _value.bigKeyboardType
+          : bigKeyboardType // ignore: cast_nullable_to_non_nullable
               as int,
       heightPadding: heightPadding == freezed
           ? _value.heightPadding
@@ -170,7 +170,7 @@ class _$_KeyboardState implements _KeyboardState {
   const _$_KeyboardState(
       {this.showCursor = false,
       this.localeKeyboard = localeUk,
-      this.keyboardType = letterType,
+      this.bigKeyboardType = letterType,
       this.heightPadding = 0,
       this.number = -1});
 
@@ -182,7 +182,7 @@ class _$_KeyboardState implements _KeyboardState {
   final String localeKeyboard;
   @JsonKey()
   @override
-  final int keyboardType;
+  final int bigKeyboardType;
   @JsonKey()
   @override
   final double heightPadding;
@@ -192,7 +192,7 @@ class _$_KeyboardState implements _KeyboardState {
 
   @override
   String toString() {
-    return 'KeyboardState(showCursor: $showCursor, localeKeyboard: $localeKeyboard, keyboardType: $keyboardType, heightPadding: $heightPadding, number: $number)';
+    return 'KeyboardState(showCursor: $showCursor, localeKeyboard: $localeKeyboard, bigKeyboardType: $bigKeyboardType, heightPadding: $heightPadding, number: $number)';
   }
 
   @override
@@ -205,7 +205,7 @@ class _$_KeyboardState implements _KeyboardState {
             const DeepCollectionEquality()
                 .equals(other.localeKeyboard, localeKeyboard) &&
             const DeepCollectionEquality()
-                .equals(other.keyboardType, keyboardType) &&
+                .equals(other.bigKeyboardType, bigKeyboardType) &&
             const DeepCollectionEquality()
                 .equals(other.heightPadding, heightPadding) &&
             const DeepCollectionEquality().equals(other.number, number));
@@ -216,7 +216,7 @@ class _$_KeyboardState implements _KeyboardState {
       runtimeType,
       const DeepCollectionEquality().hash(showCursor),
       const DeepCollectionEquality().hash(localeKeyboard),
-      const DeepCollectionEquality().hash(keyboardType),
+      const DeepCollectionEquality().hash(bigKeyboardType),
       const DeepCollectionEquality().hash(heightPadding),
       const DeepCollectionEquality().hash(number));
 
@@ -230,7 +230,7 @@ abstract class _KeyboardState implements KeyboardState {
   const factory _KeyboardState(
       {bool showCursor,
       String localeKeyboard,
-      int keyboardType,
+      int bigKeyboardType,
       double heightPadding,
       int number}) = _$_KeyboardState;
 
@@ -239,7 +239,7 @@ abstract class _KeyboardState implements KeyboardState {
   @override
   String get localeKeyboard;
   @override
-  int get keyboardType;
+  int get bigKeyboardType;
   @override
   double get heightPadding;
   @override

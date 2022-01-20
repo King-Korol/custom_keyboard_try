@@ -81,7 +81,7 @@ class _KeyboardState extends ConsumerState<Keyboard> {
                     ],
                   ),
                   child: CustomKeyboard(
-                      type: widget.keyboardType,
+                      keyboardType: widget.keyboardType,
                       onTextInput: (myText) {
                         log('onTextInput: $myText');
                         widget.insertText.call(myText);
